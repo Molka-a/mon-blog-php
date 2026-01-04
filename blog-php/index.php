@@ -1,35 +1,42 @@
-
-
 <html>
-<head><title>Welcome to my excellent blog</title></head>
+<head>
+    <title>Welcome to Our excellent blog : Molka Amara - Dhouha Hamdi - Yosr Cherif</title>
+</head>
 <body>
     <img src='storage/my-excellent-blog.png'>
-    <h1>Welcome to my excellent blog</h1>
+    <h1>Welcome to our excellent blog : Molka Amara - Dhouha Hamdi - Yosr Cherif</h1>
 
-    <?php
-        $dbserver = getenv('DB_HOST') ?: 'db';
-        $dbname = getenv('DB_NAME') ?: 'blog_db';
-        $dbuser = getenv('DB_USER') ?: 'blog_user';
-        $dbpassword = getenv('DB_PASSWORD') ?: 'password';
+<?php
+require __DIR__ . '/vendor/autoload.php';  // Charger Composer autoload
 
-        $conn = null;
+// Charger les variables du fichier .env
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
 
-        try {
-            // Tentative de connexion à la base de données
-            $conn = new PDO("mysql:host=$dbserver;dbname=$dbname;charset=utf8mb4", $dbuser, $dbpassword);
-            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+// Récupérer les variables de la base
+$dbserver = getenv('DB_HOST');
+$dbname   = getenv('DB_NAME');
+$dbuser   = getenv('DB_USER');
+$dbpassword = getenv('DB_PASSWORD');
 
-            // Si la connexion réussit, vous pouvez continuer avec la logique du blog
-            echo "Connected successfully to the database **$dbname** on **$dbserver**.";
+$conn = null;
 
+try {
+    // Tentative de connexion à la base de données
+    $conn = new PDO("mysql:host=$dbserver;dbname=$dbname;charset=utf8mb4", $dbuser, $dbpassword);
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
+    // Si la connexion réussit
+    echo "Connected successfully to the database **$dbname** on **$dbserver**.";
 
-        } catch(PDOException $e) {
-            // Gestion des erreurs de connexion
-            echo "Database connection failed: " . $e->getMessage();
-        }
-        ?>
+} catch(PDOException $e) {
+    // Gestion des erreurs de connexion
+    echo "Database connection failed: " . $e->getMessage();
+}
 
-    <?php if ($conn) echo "<p>Database status: **Connected**</p>"; ?>
+if ($conn) {
+    echo "<p>Database status: **Connected**</p>";
+}
+?>
 </body>
 </html>
